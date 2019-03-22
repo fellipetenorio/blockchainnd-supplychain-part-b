@@ -13,3 +13,5 @@ UML Diagrams (diagrams folder)
 1. Book Writing - Sequence Diagram
 1. Book Writing - State Diagram
 1. Book Writing - Classes Diagram
+
+Some code from [here](https://github.com/udacity/nd1309-Project-6b-Example-Template) was imported to the contract.
