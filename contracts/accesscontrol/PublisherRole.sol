@@ -5,7 +5,7 @@ import "./Roles.sol";
 
 // Define a contract 'PublisherRole' to manage this role - add, remove, check
 contract PublisherRole {
-
+  
   // Define 2 events, one for Adding, and other for Removing
 
   // Define a struct 'Publishers' by inheriting from 'Roles' library, struct Role
