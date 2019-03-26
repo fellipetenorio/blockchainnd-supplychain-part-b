@@ -14,7 +14,6 @@ contract LibraryRole {
   // Define a struct 'Librarys' by inheriting from 'Roles' library, struct Role
   Roles.Role private Libraries;
 
-  // In the constructor make the address that deploys this contract the 1st Library
   constructor() public {
     
   }
@@ -37,7 +36,7 @@ contract LibraryRole {
 
   // Define a function 'renounceLibrary' to renounce this role
   function renounceLibrary() public {
-    
+    _removeLibrary(msg.sender);
   }
 
   // Define an internal function '_addLibrary' to add this role, called by 'addLibrary'
