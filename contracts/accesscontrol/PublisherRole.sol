@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.2;
 
 // Import the library 'Roles'
 import "./Roles.sol";
@@ -16,12 +16,17 @@ contract PublisherRole {
 
   // In the constructor make the address that deploys this contract the 1st Publisher
   constructor() public {
-    
+    _addPublisher(msg.sender);
   }
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyPublisher() {
     require(isPublisher(msg.sender));
+    _;
+  }
+
+  modifier checkPublisher(address account) {
+    require(isPublisher(account));
     _;
   }
 
