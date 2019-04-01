@@ -20,6 +20,11 @@ contract SupplyChain {
     // that track its journey through the supply chain -- to be sent from DApp.
     mapping(uint => string[]) BooksHistory;
 
+    // TODO map the book orders
+    // mapping to Libraries Orders
+    // library => [upc => Order]
+    mapping(address => mapping(uint => Order)) Orders;
+
     // DONE
     // Define enum 'State' with the following values:
     enum State
@@ -29,13 +34,15 @@ contract SupplyChain {
         Approved, // 2
         Written, // 3
         Reviewed, // 4
-        Order, // 5
-        Produce, // 6
-        Shipped, // 7
-        Received   // 8
+        Art // 5
     }
 
-    State constant defaultState = State.Abstract;
+    enum OrderState {
+        Ordered, // 0
+        Produced, // 1
+        Shipped, // 2
+        Received  // 3
+    }
 
     // Define a struct 'Book' with the following fields:
     struct Book {
@@ -48,8 +55,7 @@ contract SupplyChain {
         string bAbstract; // Book Abstract
         string draft; // Book Draft
         string finalText; // Book final version
-        // string  originWriterLatitude; // Farm Latitude
-        // string  originWriterLongitude;  // Farm Longitude
+        string assetsURL;
         uint productID;  // Product ID potentially a combination of upc + sku
         string productNotes; // Product Notes
         uint productPrice; // Product Price
@@ -60,6 +66,12 @@ contract SupplyChain {
         address libraryID; // Metamask-Ethereum address of the Library
     }
 
+    // Once a book can be ordered by many libraries a Order Status is necessary
+    struct Order {
+        uint quantity;
+        State OrderState;
+    }
+
     // DONE
     // Define 9 events with the same 9 state values and accept 'upc' as input argument
     event Abstract(uint upc);
@@ -68,10 +80,11 @@ contract SupplyChain {
     event Approved(uint upc);
     event Written(uint upc);
     event Reviewed(uint upc);
-    event Ordered(uint upc);
-    event Produced(uint upc);
-    event Shipped(uint upc);
-    event Received(uint upc);
+    event Art(uint upc, string assetsUrl);
+    event Ordered(uint upc, uint _quantity, address libraryID);
+    event Produced(uint upc, address libraryID);
+    event Shipped(uint upc, address libraryID);
+    event Received(uint upc, address libraryID);
 
     // DONE
     // Define a modifer that checks to see if msg.sender == owner of the contract
@@ -89,8 +102,9 @@ contract SupplyChain {
 
     // DONE
     // Define a modifier that checks if the paid amount is sufficient to cover the price
-    modifier paidEnough(uint _price) {
-        require(msg.value >= _price);
+    modifier paidEnough(uint _upc, uint _quantity) {
+        uint _price_unity = Books[_upc].productPrice;
+        require(msg.value >= _price_unity * _quantity);
         _;
     }
 
@@ -99,7 +113,8 @@ contract SupplyChain {
     modifier checkValue(uint _upc) {
         _;
         uint _price = Books[_upc].productPrice;
-        uint amountToReturn = msg.value - _price;
+        uint _quantity = Orders[msg.sender];
+        uint amountToReturn = msg.value * _quantity - _price;
         Books[_upc].consumerID.transfer(amountToReturn);
     }
 
@@ -146,9 +161,23 @@ contract SupplyChain {
     }
 
     // DONE
-    // Define a modifier that checks if an Book.state of a upc is order
-    modifier ordered(uint _upc) {
-        require(Books[_upc].BookState == State.Order, "The book need to be ordered");
+    // Define a modifier that checks if an Book.state of a upc is Reviewed
+    modifier art(uint _upc) {
+        require(Books[_upc].BookState == State.Art, "The book need assets");
+        _;
+    }
+
+    modifier ordable (uint _upc) {
+        require(!Orders.has(_upc) ||
+            (), "This Library already ordered this book");
+        require(Books[_upc].BookState == State.Art, "Book not ready for sale");
+        _;
+    }
+
+    // DONE
+    // Define a modifier that checks if an Book.state of a upc was ordered by the library
+    modifier ordered(uint _upc, address libraryID) {
+        require(Orders[libraryID] > 0, "This Library didn't ordered this Book");
         _;
     }
 
@@ -274,80 +303,118 @@ contract SupplyChain {
     onlyReviewer
     currentOwner(_upc)
     {
-        Books[_upc].ownerID = Books[_upc].writerID;
+        Books[_upc].ownerID = Books[_upc].publisherID;
         Books[_upc].BookState = State.Reviewed;
         Books[_upc].finalText = finalText;
 
         emit Reviewed(_upc);
     }
 
-    // Define a function 'sellBook' that allows a Writer to mark an Book 'ForSale'
-    function sellBook(uint _upc, uint _price) public
+    // DONE (TODO add log)
+    // create the art (for now the art will be an URL do book's assets)
+    function artBook(uint _upc, string assetsURL) public
         // Call modifier to check if upc has passed previous supply chain stage
+    reviewed(_upc)
         // Call modifier to verify caller of this function
-
+    onlyPublisher
+    currentOwner(_upc)
     {
         // Update the appropriate fields
+        Books[_upc].BookState = State.Art;
+        Books[_upc].assetsURL = assetsURL;
 
         // Emit the appropriate event
-
+        emit Art(_upc, assetsURL);
     }
 
-    // Define a function 'buyBook' that allows the disributor to mark an Book 'Sold'
-    // Use the above defined modifiers to check if the Book is available for sale, if the buyer has paid enough,
-    // and any excess ether sent is refunded back to the buyer
-    function buyBook(uint _upc) public payable
+
+
+    // DONE (TODO add log)
+    // from this moment the library can order (buy) the book
+    // In this smart contract, the library will pay the total amount of books
+    // For the sake of simplicity only one order by book (any quantity) by Library is allowed
+    // In this scenario the value of the order is 50/50 to writer and publisher
+    function orderBook(uint _upc, uint _quantity) public payable
         // Call modifier to check if upc has passed previous supply chain stage
-
+    onlyLibrary
+    availableUpc(_upc)
+    ordable(_upc)
         // Call modifer to check if buyer has paid enough
-
+    paidEnough(_upc, _quantity)
         // Call modifer to send any excess ether back to buyer
-
+    checkValue(_upc)
     {
 
         // Update the appropriate fields - ownerID, distributorID, BookState
+        Orders[msg.sender] = Order({
+            quantity : _quantity,
+            OrderState : OrderState.Ordered
+            });
+        uint _totalPayment = Books[_upc].productPrice * _quantity;
+        uint _publisherPayment = _totalPayment / 2;
 
+        // Publisher payment
+        Books[_upc].writerID.transfer(_publisherPayment);
         // Transfer money to Writer
+        Books[_upc].writerID.transfer(_totalPayment - _publisherPayment);
 
         // emit the appropriate event
-
+        emit Ordered(_upc, _quantity, msg.sender);
     }
 
-    // Define a function 'shipBook' that allows the distributor to mark an Book 'Shipped'
-    // Use the above modifers to check if the Book is sold
-    function shipBook(uint _upc) public
+
+    // DONE (TODO add log)
+    // produce the book by demand
+    function produceBook(uint _upc, address _libraryID) public
         // Call modifier to check if upc has passed previous supply chain stage
-
+    art(_upc)
+    ordered(_libraryID)
         // Call modifier to verify caller of this function
-
+    libraryOwner(_libraryID)
+    onlyPublisher
+    currentOwner(_upc)
     {
         // Update the appropriate fields
+        Books[_upc].BookState = State.Produce;
 
-        // Emit the appropriate event
-
+        // Emit the appropriate event (some order was produced)
+        emit Produced(_upc, _libraryID);
     }
 
+    // DONE (TODO add log)
+    // Define a function 'shipBook' that allows the distributor to mark an Book 'Shipped'
+    // Use the above modifier to check if the Book is sold (have map to this book)
+    function shipBook(uint _upc, address _libraryID) public
+        // Call modifier to check if upc has passed previous supply chain stage
+    produced(_upc)
+        // Call modifier to verify caller of this function
+    currentOwner(_upc)
+    ordered(_upc, _libraryID)
+    {
+        // Update the appropriate fields
+        Books[_upc].BookState = State.Shipped;
+
+        // In this Smart Contract the owner is still the Publisher because
+        // there is many orders, so change the book ownership to library would
+        // invalidate all orders
+
+        // Emit the appropriate event
+        emit Shipped(_upc, _libraryID);
+    }
+
+
+    // DONE (TODO add log)
     // Define a function 'receiveBook' that allows the retailer to mark an Book 'Received'
     // Use the above modifiers to check if the Book is shipped
     function receiveBook(uint _upc) public
         // Call modifier to check if upc has passed previous supply chain stage
-
+    shipped(_upc)
         // Access Control List enforced by calling Smart Contract / DApp
+    onlyLibrary
     {
         // Update the appropriate fields - ownerID, retailerID, BookState
 
-        // Emit the appropriate event
-
-    }
-
-    // Define a function 'purchaseBook' that allows the consumer to mark an Book 'Purchased'
-    // Use the above modifiers to check if the Book is received
-    function purchaseBook(uint _upc) public
-        // Call modifier to check if upc has passed previous supply chain stage
-
-        // Access Control List enforced by calling Smart Contract / DApp
-    {
-        // Update the appropriate fields - ownerID, consumerID, BookState
+        // after received the books, the Order is deleted, so
 
         // Emit the appropriate event
 
