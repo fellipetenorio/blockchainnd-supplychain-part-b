@@ -16,7 +16,7 @@ contract ReviewerRole {
 
   // In the constructor make the address that deploys this contract the 1st Reviewer
   constructor() public {
-    //_addReviewer(msg.sender);
+    _addReviewer(msg.sender);
   }
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
