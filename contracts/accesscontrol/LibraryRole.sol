@@ -15,7 +15,7 @@ contract LibraryRole {
   Roles.Role private Libraries;
 
   constructor() public {
-    _addLibrary(msg.sender)ç
+    _addLibrary(msg.sender);
   }
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
