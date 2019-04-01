@@ -15,12 +15,18 @@ contract LibraryRole {
   Roles.Role private Libraries;
 
   constructor() public {
-    
+    _addLibrary(msg.sender)ç
   }
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyLibrary() {
-    require(isLibrary(msg.sender))
+    require(isLibrary(msg.sender));
+    _;
+  }
+
+  // Define a modifier that checks to see if msg.sender has the appropriate role
+  modifier libraryOwner(address account) {
+    require(isLibrary(account), "Not a Library Account");
     _;
   }
 
