@@ -168,8 +168,7 @@ contract SupplyChain {
     }
 
     modifier ordable (uint _upc) {
-        require(!Orders.has(_upc) ||
-            (), "This Library already ordered this book");
+        require(!Orders.has(_upc) || !Orders[_upc].has(msg.sender), "This Library already ordered this book");
         require(Books[_upc].BookState == State.Art, "Book not ready for sale");
         _;
     }
@@ -177,21 +176,21 @@ contract SupplyChain {
     // DONE
     // Define a modifier that checks if an Book.state of a upc was ordered by the library
     modifier ordered(uint _upc, address libraryID) {
-        require(Orders[libraryID] > 0, "This Library didn't ordered this Book");
+        require(Orders[_upc][_libID] > 0, "This Library didn't ordered this Book");
         _;
     }
 
     // DONE
     // Define a modifier that checks if an Book.state of a upc is produced
-    modifier produced(uint _upc) {
-        require(Books[_upc].BookState == State.Produce, "The book have to be produced");
+    modifier produced(uint _upc, address _libID) {
+        require(Orders[_upc][_libID].OrderState == OrderState.Produced, "The order have to be produced");
         _;
     }
 
     // DONE
     // Define a modifier that checks if an Book.state of a upc is Shipped
     modifier shipped(uint _upc) {
-        require(Books[_upc].BookState == State.Shipped, "Ship the book first");
+        require( Orders[_upc][msg.sender].OrderState == OrderState.Shipped, "Ship the book first");
         _;
     }
 
@@ -385,13 +384,12 @@ contract SupplyChain {
     // Define a function 'shipBook' that allows the distributor to mark an Book 'Shipped'
     // Use the above modifier to check if the Book is sold (have map to this book)
     function shipBook(uint _upc, address _libraryID) public
-        // Call modifier to check if upc has passed previous supply chain stage
-    produced(_upc)
-        // Call modifier to verify caller of this function
     currentOwner(_upc)
+    produced(_upc, _libraryID)
     ordered(_upc, _libraryID)
     {
         // Update the appropriate fields
+        Orders[_upc][_libraryID].OrderState = OrderState.Shipped;
         Books[_upc].BookState = State.Shipped;
 
         // In this Smart Contract the owner is still the Publisher because
@@ -403,21 +401,19 @@ contract SupplyChain {
     }
 
 
-    // DONE (TODO add log)
     // Define a function 'receiveBook' that allows the retailer to mark an Book 'Received'
     // Use the above modifiers to check if the Book is shipped
     function receiveBook(uint _upc) public
         // Call modifier to check if upc has passed previous supply chain stage
-    shipped(_upc)
-        // Access Control List enforced by calling Smart Contract / DApp
     onlyLibrary
+        // Access Control List enforced by calling Smart Contract / DApp
+    shipped(_upc)
     {
         // Update the appropriate fields - ownerID, retailerID, BookState
-
-        // after received the books, the Order is deleted, so
+        Orders[_upc][msg.sender].OrderState = OrderState.Received;
 
         // Emit the appropriate event
-
+        emit Received(_upc, msg.sender);
     }
 
     // Define a function 'fetchBookBufferOne' that fetches the data
