@@ -45,7 +45,7 @@ contract SupplyChain {
         address payable writer;
         address publisher;
         address reviewer;
-        address payable buyer; // Library
+        address payable buyer;
     }
 
     mapping(uint => Book) Books;
@@ -207,11 +207,11 @@ contract SupplyChain {
     function orderBook(uint _upc) public payable
     paidEnough(_upc)
     checkValue(_upc)
-    availableUpc(_upc)
     bookStateIs(_upc, State.Art)
     {
         Books[_upc].buyer = msg.sender;
         Books[_upc].BookState = State.Ordered;
+        Books[_upc].writer.transfer(Books[_upc].price);
 
         emit Ordered(_upc, msg.sender);
     }
