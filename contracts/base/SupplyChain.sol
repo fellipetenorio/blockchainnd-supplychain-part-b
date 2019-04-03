@@ -234,7 +234,6 @@ contract SupplyChain {
         emit Shipped(_upc);
     }
 
-
     function receive(uint _upc) public
     callerIs(Books[_upc].buyer)
     bookStateIs(_upc, State.Shipped) {
@@ -244,7 +243,6 @@ contract SupplyChain {
         emit Received(_upc, msg.sender);
     }
 
-    // Define a function 'fetchBookBufferOne' that fetches the data
     function fetchBook(uint _upc) public view returns
     (
         uint sku,
