@@ -15,3 +15,8 @@ UML Diagrams (diagrams folder)
 1. Book Writing - Classes Diagram
 
 Some code from [here](https://github.com/udacity/nd1309-Project-6b-Example-Template) was imported to the contract.
+
+To run remix IDE:
+
+remixd -s <absolute-path-to-the-shared-folder> --remix-ide https://remix.ethereum.org
+then open you browser in https://remix.ethereum.org and connect to localhost

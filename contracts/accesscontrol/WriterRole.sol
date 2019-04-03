@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.2;
 
 // Import the library 'Roles'
 import "./Roles.sol";
@@ -8,7 +8,7 @@ contract WriterRole {
   using Roles for Roles.Role;
 
   // Define 2 events, one for Adding, and other for Removing
-  event WriterAddes(address indexed account);
+  event WriterAdded(address indexed account);
   event WriterRemoved(address indexed account);
 
   // Define a struct 'Writers' by inheriting from 'Roles' library, struct Role
