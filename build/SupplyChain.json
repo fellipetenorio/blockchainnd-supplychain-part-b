@@ -1,0 +1,380 @@
+[
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            },
+            {
+                "name": "reviewer",
+                "type": "address"
+            }
+        ],
+        "name": "approve",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            },
+            {
+                "name": "_assetsUrl",
+                "type": "string"
+            }
+        ],
+        "name": "artBook",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "kill",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "orderBook",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "produceBook",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "receive",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            },
+            {
+                "name": "_writerName",
+                "type": "string"
+            },
+            {
+                "name": "_draftTitle",
+                "type": "string"
+            },
+            {
+                "name": "_bAbstract",
+                "type": "string"
+            },
+            {
+                "name": "_draft",
+                "type": "string"
+            },
+            {
+                "name": "_price",
+                "type": "uint256"
+            }
+        ],
+        "name": "registerBook",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            },
+            {
+                "name": "finalText",
+                "type": "string"
+            }
+        ],
+        "name": "review",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "ship",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            },
+            {
+                "name": "publisher",
+                "type": "address"
+            }
+        ],
+        "name": "submit",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            },
+            {
+                "name": "text",
+                "type": "string"
+            }
+        ],
+        "name": "write",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "Abstract",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "upc",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "publisher",
+                "type": "address"
+            }
+        ],
+        "name": "Submitted",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "upc",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "reviewer",
+                "type": "address"
+            }
+        ],
+        "name": "Approved",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "Written",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "Reviewed",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "upc",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "assetsUrl",
+                "type": "string"
+            }
+        ],
+        "name": "Art",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "upc",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "buyer",
+                "type": "address"
+            }
+        ],
+        "name": "Ordered",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "Produced",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "Shipped",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "Received",
+        "type": "event"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_upc",
+                "type": "uint256"
+            }
+        ],
+        "name": "fetchBook",
+        "outputs": [
+            {
+                "name": "sku",
+                "type": "uint256"
+            },
+            {
+                "name": "upc",
+                "type": "uint256"
+            },
+            {
+                "name": "writerName",
+                "type": "string"
+            },
+            {
+                "name": "title",
+                "type": "string"
+            },
+            {
+                "name": "bAbstract",
+                "type": "string"
+            },
+            {
+                "name": "text",
+                "type": "string"
+            },
+            {
+                "name": "price",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
