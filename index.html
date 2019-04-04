@@ -17,8 +17,8 @@
     </div>
 
     <div id="ftc-harvest">
-        <h2>Book Overview</h2>
         <div class="form-group">
+            <h2>Book Overview</h2>
             SKU
             <br>
             <input class="input-field" type="number" id="sku" name="sku" value=1><br>
@@ -33,34 +33,10 @@
                 <button class="btn-fetchTwo" id="button" type="button" data-id="10">Fetch Data 2</button>
             </div>
         </div>
+
         <div class=form-break></div>
-        <h2>Farm Details</h2>
         <div class="form-group">
-            Farmer ID
-            <br>
-            <input type="text" id="originFarmerID" name="originFarmerID" value="0x99c289eb2aacec289631a5ddf62cf27a63d4494f"
-                size="50"><br>
-            Farm Name
-            <br>
-            <input type="text" id="originFarmName" name="originFarmName" value="John Doe"><br>
-            Farm Information
-            <br>
-            <input type="text" id="originFarmInformation" name="originFarmInformation" value="Yarra Valley"><br>
-            Farm Latitude
-            <br>
-            <input type="text" id="originFarmLatitude" name="originFarmLatitude" value="-38.239770"><br>
-            Farm Longitude
-            <br>
-            <input type="text" id="originFarmLongitude" name="originFarmLongitude" value="144.341490"><br>
-            <br>
-            <button class="btn-harvest" id="button" type="button" data-id="1">Harvest</button>
-            <button class="btn-process" id="button" type="button" data-id="2">Process</button>
-            <button class="btn-pack" id="button" type="button" data-id="3">Pack</button>
-            <button class="btn-forsale" id="button" type="button" data-id="4">ForSale</button>
-        </div>
-        <div class=form-break></div>
-        <h2>Book</h2>
-        <div class="form-group">
+            <h2>Book</h2>
             Writer Name <br>
             <input type="text" id="writerName" name="writerName" value="Ferrer, F.T." size="60"><br>
             Book Title <br>
@@ -72,9 +48,9 @@
             Assets URL<br>
             <input type="text" id="assetsUrl" name="assetsUrl" value="http://example.com/1/assets" size="50"><br>
             Book Price<br>
-            <input type="number" id="price" name="productPrice" value=1>ETH<br><br>
+            <input type="number" id="price" name="productPrice" value=1>ETH<br>
             Writer ID <br>
-            <input type="text" id="writer" name="writer" value="0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d" size="50">
+            <input type="text" id="writer" name="writer" value="0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d" size="50"><br>
             Publisher ID<br>
             <input type="text" id="publisher" name="publisher" value="0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d" size="50"><br>
             Reviewer ID<br>
@@ -82,10 +58,16 @@
             Buyer ID<br>
             <input type="text" id="buyer" name="buyer" value="0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d" size="50"><br>
             <br>
-            <button class="btn-buy" id="button" type="button" data-id="5">Buy</button>
-            <button class="btn-ship" id="button" type="button" data-id="6">Ship</button>
-            <button class="btn-receive" id="button" type="button" data-id="7">Receive</button>
-            <button class="btn-purchase" id="button" type="button" data-id="8">Purchase</button>
+            <button data-id="1" class="btn-register" id="btn-register" type="button">Register</button>
+            <button data-id="2" class="btn-submit" id="btn-submit" type="button">Submit</button>
+            <button data-id="3" class="btn-approve" id="btn-approve" type="button">Approve</button>
+            <button data-id="4" class="btn-write" id="btn-write" type="button">Write</button>
+            <button data-id="5" class="btn-review" id="btn-review" type="button">Review</button>
+            <button data-id="6" class="btn-art" id="btn-art" type="button">Art</button>
+            <button data-id="7" class="btn-order" id="btn-order" type="button">Order</button>
+            <button data-id="8" class="btn-produce" id="btn-produce" type="button">Produce</button>
+            <button data-id="9" class="btn-ship" id="btn-ship" type="button">Ship</button>
+            <button data-id="10" class="btn-receive" id="btn-receive" type="button">Receive</button>
         </div>
         <div class=form-break></div>
         <hr>

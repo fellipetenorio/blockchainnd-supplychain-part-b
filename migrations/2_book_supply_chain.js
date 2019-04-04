@@ -1,4 +1,4 @@
-var Book = artifacts.require("./Book.sol");
+var Book = artifacts.require("./BookSupplyChain.sol");
 
 module.exports = function(deployer) {
     deployer.deploy(Book);

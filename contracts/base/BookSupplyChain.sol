@@ -1,14 +1,7 @@
 pragma solidity ^0.5.2;
 
-import {Ownable} from "../core/Ownable.sol";
-
-import {PublisherRole} from "../accesscontrol/PublisherRole.sol";
-import {LibraryRole} from "../accesscontrol/LibraryRole.sol";
-import {ReviewerRole} from "../accesscontrol/ReviewerRole.sol";
-import {WriterRole} from "../accesscontrol/WriterRole.sol";
-
 // Define a contract 'Supplychain'
-contract Book {
+contract BookSupplyChain {
     address payable owner;
     uint  currentSku;
 
