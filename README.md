@@ -9,7 +9,7 @@ Some code from [here](https://github.com/udacity/nd1309-Project-6b-Example-Templ
 Resources:
 1. **UML Diagrams** (`diagram` folder)
 1. **Smart Contract** (`contracts` folder)
-1. **Front-End in Node** (`webclient` folder)
+1. **WebServer**
 
 #UML Diagrams
 
@@ -50,5 +50,9 @@ For dev mode Ganache was used with one account per Role, when deployed in Rinkeb
     Use this file to reproduce the scenario tested.
 1. Folder `coew` contains the contract to ownership and transfer functions.
     
-
-    
+# Web Server
+Webserver with Node.js with express to server as http server.
+Open the terminal in the root folder and run to install depencies:
+```
+npm i
+```
