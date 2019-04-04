@@ -9,12 +9,12 @@ import {WriterRole} from "../accesscontrol/WriterRole.sol";
 
 // Define a contract 'Supplychain'
 contract SupplyChain {
-    address owner;
-    uint  sku;
+    address payable owner;
+    uint  currentSku;
 
     constructor() public payable {
         owner = msg.sender;
-        sku = 1;
+        currentSku = 1;
     }
 
     enum State {
@@ -35,10 +35,10 @@ contract SupplyChain {
         uint sku;
         uint upc;
         string writerName;
-        string draftTitle;
+        string title;
         string bAbstract;
-        string draft;
-        string finalText;
+        string text;
+        string assetsUrl;
         uint price;
         State state;
         address owner;
@@ -61,17 +61,17 @@ contract SupplyChain {
     event Shipped(uint upc);
     event Received(uint upc);
 
-    function stateLabel(State state) internal view returns (string) {
-        if (state == Abstract) return "Abstract";
-        if (state == Submitted) return "Submitted";
-        if (state == Approved) return "Approved";
-        if (state == Written) return "Written";
-        if (state == Reviewed) return "Reviewed";
-        if (state == Art) return "Art";
-        if (state == Ordered) return "Ordered";
-        if (state == Produced) return "Produced";
-        if (state == Shipped) return "Shipped";
-        if (state == Received) return "Received";
+    function stateLabel(State state) internal pure returns (string memory) {
+        if (state == State.Abstract) return "Abstract";
+        if (state == State.Submitted) return "Submitted";
+        if (state == State.Approved) return "Approved";
+        if (state == State.Written) return "Written";
+        if (state == State.Reviewed) return "Reviewed";
+        if (state == State.Art) return "Art";
+        if (state == State.Ordered) return "Ordered";
+        if (state == State.Produced) return "Produced";
+        if (state == State.Shipped) return "Shipped";
+        if (state == State.Received) return "Received";
         return "";
     }
 
@@ -83,7 +83,7 @@ contract SupplyChain {
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner());
+        require(msg.sender == owner);
         _;
     }
 
@@ -100,26 +100,26 @@ contract SupplyChain {
 
     modifier checkValue(uint _upc) {
         _;
-        uint _price = Books[_upc].productPrice;
+        uint _price = Books[_upc].price;
         uint amountToReturn = msg.value - _price;
         msg.sender.transfer(amountToReturn);
     }
 
     modifier currentOwner(uint _upc) {
-        require(Books[_upc].ownerID == msg.sender, "You don't have permission to modify this book");
+        require(Books[_upc].owner == msg.sender, "You don't have permission to modify this book");
         _;
     }
 
     modifier bookStateIs(uint _upc, State state) {
-        require(Books[_upc].state == state, "Invalid Book state (" + stateLabel(state) + ") for this action");
+        require(Books[_upc].state == state, "Invalid Book state for this action");
         _;
     }
 
     // DONE
     // Define a function 'kill' if required
     function kill() public {
-        if (msg.sender == owner()) {
-            selfdestruct(owner());
+        if (msg.sender == owner) {
+            selfdestruct(owner);
         }
     }
 
@@ -129,22 +129,23 @@ contract SupplyChain {
     public availableUpc(_upc) {
         // Initialize only the essential
         Books[_upc] = Book({
-            sku : sku,
+            sku : currentSku,
             upc : _upc,
             writerName : _writerName,
-            draftTitle : _draftTitle,
+            title : _draftTitle,
             bAbstract : _bAbstract,
-            draft : _draft,
-            finalText : "",
+            text : _draft,
+            assetsUrl : "",
             price : _price,
             state : State.Abstract,
             owner : msg.sender,
             writer : msg.sender,
             publisher : address(0),
-            reviewer : address(0)
+            reviewer : address(0),
+            buyer : address(0)
             });
 
-        sku = sku + 1;
+        currentSku++;
 
         // Emit the appropriate event
         emit Abstract(_upc);
@@ -156,6 +157,7 @@ contract SupplyChain {
     bookStateIs(_upc, State.Abstract) {
         Books[_upc].owner = publisher;
         Books[_upc].publisher = publisher;
+        Books[_upc].state = State.Submitted;
 
         // Emit the appropriate event
         emit Submitted(_upc, publisher);
@@ -168,7 +170,7 @@ contract SupplyChain {
         // Update the appropriate fields
         Books[_upc].owner = Books[_upc].writer;
         Books[_upc].reviewer = reviewer;
-        Books[_upc].BookState = State.Approved;
+        Books[_upc].state = State.Approved;
 
         // Emit the appropriate event
         emit Approved(_upc, reviewer);
@@ -179,7 +181,8 @@ contract SupplyChain {
     bookStateIs(_upc, State.Approved) {
 
         Books[_upc].owner = Books[_upc].reviewer;
-        Books[_upc].draft = text;
+        Books[_upc].text = text;
+        Books[_upc].state = State.Written;
 
         emit Written(_upc);
     }
@@ -189,7 +192,8 @@ contract SupplyChain {
     callerIs(Books[_upc].reviewer)
     bookStateIs(_upc, State.Written) {
         Books[_upc].owner = Books[_upc].publisher;
-        Books[_upc].finalText = finalText;
+        Books[_upc].text = finalText;
+        Books[_upc].state = State.Reviewed;
 
         emit Reviewed(_upc);
     }
@@ -197,11 +201,12 @@ contract SupplyChain {
     function artBook(uint _upc, string memory _assetsUrl) public
     callerIs(Books[_upc].publisher)
     bookStateIs(_upc, State.Reviewed) {
-        Books[_upc].BookState = State.Art;
+        Books[_upc].state = State.Art;
         Books[_upc].assetsUrl = _assetsUrl;
+        Books[_upc].state = State.Art;
 
         // emit the event showing the book art URL
-        emit Art(_upc, _assetsURL);
+        emit Art(_upc, _assetsUrl);
     }
 
     function orderBook(uint _upc) public payable
@@ -210,7 +215,7 @@ contract SupplyChain {
     bookStateIs(_upc, State.Art)
     {
         Books[_upc].buyer = msg.sender;
-        Books[_upc].BookState = State.Ordered;
+        Books[_upc].state = State.Ordered;
         Books[_upc].writer.transfer(Books[_upc].price);
 
         emit Ordered(_upc, msg.sender);
@@ -220,7 +225,7 @@ contract SupplyChain {
     function produceBook(uint _upc) public
     callerIs(Books[_upc].publisher)
     bookStateIs(_upc, State.Ordered) {
-        Books[_upc].BookState = State.Produce;
+        Books[_upc].state = State.Produced;
 
         emit Produced(_upc);
     }
@@ -228,7 +233,7 @@ contract SupplyChain {
     function ship(uint _upc) public
     callerIs(Books[_upc].publisher)
     bookStateIs(_upc, State.Produced) {
-        Books[_upc].BookState = State.Shipped;
+        Books[_upc].state = State.Shipped;
         Books[_upc].owner = Books[_upc].buyer;
 
         emit Shipped(_upc);
@@ -237,46 +242,34 @@ contract SupplyChain {
     function receive(uint _upc) public
     callerIs(Books[_upc].buyer)
     bookStateIs(_upc, State.Shipped) {
-        Books[_upc].BookState = State.Received;
+        Books[_upc].state = State.Received;
 
         // Boom! Book delivered
-        emit Received(_upc, msg.sender);
+        emit Received(_upc);
     }
 
     function fetchBook(uint _upc) public view returns
     (
         uint sku,
         uint upc,
-        string writerName,
-        string draftTitle,
-        string bAbstract,
-        string draft,
-        string finalText,
-        uint price,
-        State state,
-        address owner,
-        address payable writer,
-        address publisher,
-        address reviewer,
-        address payable buyer
+        string memory writerName,
+        string memory title,
+        string memory bAbstract,
+        string memory text,
+        uint price
+        
     )
     {
         // Assign values to the 8 parameters
         Book storage book = Books[_upc];
 
-        sku = book[sku];
-        upc = book[upc];
-        writerName = book[writerName];
-        draftTitle = book[draftTitle];
-        bAbstract = book[bAbstract];
-        draft = book[draft];
-        finalText = book[finalText];
-        price = book[price];
-        state = stateLabel(book[state]);
-        owner = book[owner];
-        writer = book[writer];
-        publisher = book[publisher];
-        reviewer = book[reviewer];
-        buyer = book[buyer];
+        sku = book.sku;
+        upc = book.upc;
+        writerName = book.writerName;
+        title = book.title;
+        bAbstract = book.bAbstract;
+        text = book.text;
+        price = book.price;
+        
     }
 }
