@@ -13,9 +13,9 @@
  */
 const HDWalletProvider = require("truffle-hdwallet-provider");
 var mnemonic = "scale suit normal possible arm boost ridge blame orphan pilot rigid quit";
-//TODO - this is default address created from mnemonic above
-//TODO - rinkeby transaction for 3 ether
-// https://rinkeby.etherscan.io/address/TODO - contract on rinkeby
+//https://twitter.com/fellipe_tenorio/status/1113824664927854593 - this is default address created from mnemonic above
+//https://rinkeby.etherscan.io/tx/0x5de7d616e4b099a2a33637403d07dfa665dff2de7d4f306692458461457f5c91 - rinkeby transaction for 3 ether
+// https://rinkeby.etherscan.io/address/0xae82908c76419ea37c011f49dc85f31d2f04f0df - contract on rinkeby
 module.exports = {
     // See <http://truffleframework.com/docs/advanced/configuration>
     // to customize your Truffle configuration!
