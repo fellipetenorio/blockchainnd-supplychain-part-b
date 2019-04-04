@@ -1,0 +1,32 @@
+{
+  "name": "blockchainnd-supplychain-part-b",
+  "version": "1.0.0",
+  "description": "Project for Part B of Term 2 Blockchain Udacity Nanodeegre Supply Chain project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fellipetenorio/blockchainnd-supplychain-part-b.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fellipetenorio/blockchainnd-supplychain-part-b/issues"
+  },
+  "homepage": "https://github.com/fellipetenorio/blockchainnd-supplychain-part-b#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "nodemon": "^1.18.10",
+    "truffle": "^5.0.10",
+    "solidity-coverage": "^0.5.2",
+    "solium": "^1.1.7",
+    "web3": "^1.0.0-beta.35",
+    "coveralls": "^3.0.2",
+    "ethereumjs-wallet": "0.6.2",
+    "truffle-hdwallet-provider": "0.0.6",
+    "ganache-cli": "^6.1.8"
+  }
+}

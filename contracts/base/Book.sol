@@ -8,7 +8,7 @@ import {ReviewerRole} from "../accesscontrol/ReviewerRole.sol";
 import {WriterRole} from "../accesscontrol/WriterRole.sol";
 
 // Define a contract 'Supplychain'
-contract SupplyChain {
+contract Book {
     address payable owner;
     uint  currentSku;
 

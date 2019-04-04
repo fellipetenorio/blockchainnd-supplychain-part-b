@@ -4,4 +4,4 @@ let app = express();
 
 app.use(express.static("./"));
 
-app.listen(port, ()=>{console.log('listening http://localhost:8080')});
+app.listen(port, ()=>{console.log(`listening http://localhost:${port}`)});
