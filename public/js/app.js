@@ -8,14 +8,14 @@ App = {
     sku: 0,
     upc: 0,
     metamaskAccountID: "0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d",
-    writerID: "0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d",
     writerName: null,
     title: null,
     bAbstract: null,
     price: 0,
-    publisherID: "0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d",
-    reviewerID: "0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d",
-    buyerID: "0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d",
+    writer: "0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d",
+    publisher: "0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d",
+    reviewer: "0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d",
+    buyer: "0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d",
 
     init: async function () {
         App.readForm();
@@ -26,7 +26,6 @@ App = {
     readForm: function () {
         App.sku = $("#sku").val();
         App.upc = $("#upc").val();
-
         App.writerName = $("#writerName").val();
         App.title = $("#title").val();
         App.bAbstract = $("#bAbstract").val();
@@ -37,21 +36,6 @@ App = {
         App.publisher = $("#publisher").val();
         App.reviewer = $("#reviewer").val();
         App.buyer = $("#buyer").val();
-
-        console.log(
-            App.sku,
-            App.upc,
-            App.writerName,
-            App.title,
-            App.bAbstract,
-            App.text,
-            App.assetsUrl,
-            App.price,
-            App.writer,
-            App.publisher,
-            App.reviewer,
-            App.buyer
-        );
     },
 
     initWeb3: async function () {
@@ -90,14 +74,14 @@ App = {
                 console.log('Error:', err);
                 return;
             }
-            console.log('getMetaskID:', res);
             App.metamaskAccountID = res[0];
-
+            $('#current-account').html(App.metamaskAccountID);
+            $('#writer, #publisher, #reviewer, #buyer').val(App.metamaskAccountID);
         })
     },
 
     initSupplyChain: function () {
-        /// Source the truffle compiled smart contracts
+        /// ABI
         var jsonSupplyChain = '/public/js/abi/BookSupplyChain.json';
 
         /// JSONfy the smart contracts
@@ -108,71 +92,78 @@ App = {
             App.contracts.SupplyChainContract = App.contracts.SupplyChain.at(App.contractAddress);
 
             App.fetchAllEvents();
-
         });
 
         return App.bindEvents();
     },
 
     bindEvents: function () {
-        $(document).on('click', App.handleButtonClick);
+        $('button').on('click', App.handleButtonClick);
     },
 
     handleButtonClick: async function (event) {
         event.preventDefault();
 
+        App.readForm();
         App.getMetaskAccountID();
+        var action = parseInt($(event.target).data('id'));
+        console.log('action', action);
 
-        var processId = parseInt($(event.target).data('id'));
-        console.log('processId', processId);
-
-        switch (processId) {
-            case 1:
-                return await App.registerBook(event);
-                break;
-            case 2:
-                return await App.processItem(event);
-                break;
-            case 3:
-                return await App.packItem(event);
-                break;
-            case 4:
-                return await App.sellItem(event);
-                break;
-            case 5:
-                return await App.buyItem(event);
-                break;
-            case 6:
-                return await App.shipItem(event);
-                break;
-            case 7:
-                return await App.receiveItem(event);
-                break;
-            case 8:
-                return await App.purchaseItem(event);
-                break;
-            case 9:
-                return await App.fetchItemBufferOne(event);
-                break;
-            case 10:
-                return await App.fetchItemBufferTwo(event);
-                break;
+        switch (action) {
+            case 1: return await App.registerBook(event);
+            case 2: return await App.submit(event);
+            case 3: return await App.approve(event);
+            case 4: return await App.write(event);
+            case 5: return await App.review(event);
+            case 6: return await App.artBook(event);
+            case 7: return await App.orderBook(event);
+            case 8: return await App.produceBook(event);
+            case 9: return await App.ship(event);
+            case 10: return await App.receive(event);
+            case 11: return await App.fetchBook(event);
         }
     },
 
     registerBook: function (event) {
         event.preventDefault();
 
-        new Promise((reject, resolve) => {
-            App.contracts.SupplyChainContract.fetchBook(1, function (error, book) {
-                if (error) reject(error);
+        new Promise((resolve, reject) => {
+            if(!App.upc)
+                throw new Error("Invalid UPC");
+            var upc = App.upc;
+            var writerName =
+            App.contracts.SupplyChainContract.registerBook(App.upc, App.writerName, App.title, App.bAbstract,
+                App.text, App.price,
+                function (error, book) {
+                if (error) throw new Error(error);
 
                 resolve(book);
             })
-        }).then(console.log)
-        .catch(console.log);
+        }).then(b => {
+            console.log(b);
+            alert('book registred');
+        }).catch(alert);
     },
 
+    submit: function (event) {
+        event.preventDefault();
+
+        new Promise((resolve, reject) => {
+            if(!App.upc)
+                throw new Error("Invalid UPC");
+            var upc = App.upc;
+            var writerName =
+            App.contracts.SupplyChainContract.registerBook(App.upc, App.publisher,
+                function (error, book) {
+                if (error) throw new Error(error);
+
+                resolve(book);
+            })
+        }).then(b => {
+            console.log(b);
+            alert('book registred');
+        }).catch(alert);
+    },
 
     purchaseItem: function (event) {
         event.preventDefault();
@@ -186,6 +177,30 @@ App = {
         }).catch(function (err) {
             console.log(err.message);
         });
+    },
+
+    fetchBook: function (event) {
+        event.preventDefault();
+
+        new Promise((resolve, reject) => {
+            if(!App.upc)
+                throw new Error("Invalid UPC");
+
+            App.contracts.SupplyChainContract.fetchBook(App.upc, function (error, book) {
+                if (error) throw new Error(error);
+
+                resolve(book);
+            });
+        }).then(book => {
+            console.log('book', book);
+            $('#fetch-sku').val(book[0]);
+            $('#fetch-upc').val(book[1]);
+            $('#fetch-writer-name').val(book[2]);
+            $('#fetch-title').val(book[3]);
+            $('#fetch-abstract').val(book[4]);
+            $('#fetch-text').val(book[5]);
+            $('#fetch-price').val(book[6]);
+        }).catch(alert);
     },
     fetchAllEvents: function () {
         App.contracts.SupplyChainContract.allEvents(function (err, log) {
