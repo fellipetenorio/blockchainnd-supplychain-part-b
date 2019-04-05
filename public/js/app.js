@@ -110,17 +110,28 @@ App = {
         console.log('action', action);
 
         switch (action) {
-            case 1: return await App.registerBook(event);
-            case 2: return await App.submit(event);
-            case 3: return await App.approve(event);
-            case 4: return await App.write(event);
-            case 5: return await App.review(event);
-            case 6: return await App.artBook(event);
-            case 7: return await App.orderBook(event);
-            case 8: return await App.produceBook(event);
-            case 9: return await App.ship(event);
-            case 10: return await App.receive(event);
-            case 11: return await App.fetchBook(event);
+            case 1:
+                return await App.registerBook(event);
+            case 2:
+                return await App.submit(event);
+            case 3:
+                return await App.approve(event);
+            case 4:
+                return await App.write(event);
+            case 5:
+                return await App.review(event);
+            case 6:
+                return await App.artBook(event);
+            case 7:
+                return await App.orderBook(event);
+            case 8:
+                return await App.produceBook(event);
+            case 9:
+                return await App.ship(event);
+            case 10:
+                return await App.receive(event);
+            case 11:
+                return await App.fetchBook(event);
         }
     },
 
@@ -128,17 +139,15 @@ App = {
         event.preventDefault();
 
         new Promise((resolve, reject) => {
-            if(!App.upc)
+            if (!App.upc)
                 throw new Error("Invalid UPC");
-            var upc = App.upc;
-            var writerName =
             App.contracts.SupplyChainContract.registerBook(App.upc, App.writerName, App.title, App.bAbstract,
                 App.text, App.price,
                 function (error, book) {
-                if (error) throw new Error(error);
+                    if (error) throw new Error(error);
 
-                resolve(book);
-            })
+                    resolve(book);
+                })
         }).then(b => {
             console.log(b);
             alert('book registred');
@@ -149,41 +158,162 @@ App = {
         event.preventDefault();
 
         new Promise((resolve, reject) => {
-            if(!App.upc)
+            if (!App.upc)
                 throw new Error("Invalid UPC");
-            var upc = App.upc;
-            var writerName =
-            App.contracts.SupplyChainContract.registerBook(App.upc, App.publisher,
+            App.contracts.SupplyChainContract.submit(App.upc, App.publisher,
                 function (error, book) {
-                if (error) throw new Error(error);
+                    if (error) throw new Error(error);
 
-                resolve(book);
-            })
+                    resolve(book);
+                })
         }).then(b => {
             console.log(b);
-            alert('book registred');
+            alert('book submitted');
         }).catch(alert);
     },
 
-    purchaseItem: function (event) {
+    approve: function (event) {
         event.preventDefault();
-        var processId = parseInt($(event.target).data('id'));
 
-        App.contracts.SupplyChain.deployed().then(function (instance) {
-            return instance.purchaseItem(App.upc, {from: App.metamaskAccountID});
-        }).then(function (result) {
-            $("#ftc-item").text(result);
-            console.log('purchaseItem', result);
-        }).catch(function (err) {
-            console.log(err.message);
-        });
+        new Promise((resolve, reject) => {
+            if (!App.upc)
+                throw new Error("Invalid UPC");
+            App.contracts.SupplyChainContract.approve(App.upc, App.reviewer,
+                function (error, book) {
+                    if (error) throw new Error(error);
+
+                    resolve(book);
+                })
+        }).then(b => {
+            console.log(b);
+            alert('book approved');
+        }).catch(alert);
+    },
+    write: function (event) {
+        event.preventDefault();
+
+        new Promise((resolve, reject) => {
+            if (!App.upc)
+                throw new Error("Invalid UPC");
+            App.contracts.SupplyChainContract.write(App.upc, App.text,
+                function (error, book) {
+                    if (error) throw new Error(error);
+
+                    resolve(book);
+                })
+        }).then(b => {
+            console.log(b);
+            alert('book wrote');
+        }).catch(alert);
+    },
+    review: function (event) {
+        event.preventDefault();
+
+        new Promise((resolve, reject) => {
+            if (!App.upc)
+                throw new Error("Invalid UPC");
+            App.contracts.SupplyChainContract.review(App.upc, App.text,
+                function (error, book) {
+                    if (error) throw new Error(error);
+
+                    resolve(book);
+                })
+        }).then(b => {
+            console.log(b);
+            alert('book review');
+        }).catch(alert);
+    },
+    artBook: function (event) {
+        event.preventDefault();
+
+        new Promise((resolve, reject) => {
+            if (!App.upc)
+                throw new Error("Invalid UPC");
+            App.contracts.SupplyChainContract.artBook(App.upc, App.assetsUrl,
+                function (error, book) {
+                    if (error) throw new Error(error);
+
+                    resolve(book);
+                })
+        }).then(b => {
+            console.log(b);
+            alert('book artBook');
+        }).catch(alert);
+    },
+    orderBook: function (event) {
+        event.preventDefault();
+
+        new Promise((resolve, reject) => {
+            if (!App.upc)
+                throw new Error("Invalid UPC");
+            App.contracts.SupplyChainContract.orderBook(App.upc, {from: App.metamaskAccountID},
+                function (error, book) {
+                    if (error) throw new Error(error);
+
+                    resolve(book);
+                })
+        }).then(b => {
+            console.log(b);
+            alert('book ordered');
+        }).catch(alert);
+    },
+    produceBook: function (event) {
+        event.preventDefault();
+
+        new Promise((resolve, reject) => {
+            if (!App.upc)
+                throw new Error("Invalid UPC");
+            App.contracts.SupplyChainContract.produceBook(App.upc,
+                function (error, book) {
+                    if (error) throw new Error(error);
+
+                    resolve(book);
+                })
+        }).then(b => {
+            console.log(b);
+            alert('book produced');
+        }).catch(alert);
+    },
+    ship: function (event) {
+        event.preventDefault();
+
+        new Promise((resolve, reject) => {
+            if (!App.upc)
+                throw new Error("Invalid UPC");
+            App.contracts.SupplyChainContract.ship(App.upc,
+                function (error, book) {
+                    if (error) throw new Error(error);
+
+                    resolve(book);
+                })
+        }).then(b => {
+            console.log(b);
+            alert('book shiped');
+        }).catch(alert);
+    },
+    receive: function (event) {
+        event.preventDefault();
+
+        new Promise((resolve, reject) => {
+            if (!App.upc)
+                throw new Error("Invalid UPC");
+            App.contracts.SupplyChainContract.receive(App.upc,
+                function (error, book) {
+                    if (error) throw new Error(error);
+
+                    resolve(book);
+                })
+        }).then(b => {
+            console.log(b);
+            alert('book shiped');
+        }).catch(alert);
     },
 
     fetchBook: function (event) {
         event.preventDefault();
 
         new Promise((resolve, reject) => {
-            if(!App.upc)
+            if (!App.upc)
                 throw new Error("Invalid UPC");
 
             App.contracts.SupplyChainContract.fetchBook(App.upc, function (error, book) {
