@@ -6,6 +6,17 @@ Some code from [here](https://github.com/udacity/nd1309-Project-6b-Example-Templ
 
 **Describe a Supply Chain using Blockchain for the process of writing and selling a book. Since the abract and book approval to proced until the delivery to libraries.**
 
+To install the dependencies run:
+```
+npm i
+```
+
+Then the http server
+```
+node index.js
+```
+open your brower in [http://localhost], can change the port by a variable with the same name.
+
 Resources:
 1. **UML Diagrams** (`diagram` folder)
 1. **Smart Contract** (`contracts` folder)
@@ -52,16 +63,11 @@ For dev mode Ganache was used with one account per Role, when deployed in Rinkeb
     
 # Web Server
 Webserver with Node.js with express to server as http server.
-Open the terminal in the root folder and run to install depencies:
-```
-npm i
-```
-
-after that start the http server
-```
-node index.js
-```
-open your brower in [http://localhost], can change the port by a variable with the same name.
+Node dependencies:
+1. Express
+1. web3
+1. truffle
+1. truffle-hdwallet-provider
 
 ### Tx Hashes
 >Abstract - 0xfc3b9dacc5090827f6e1cf9aa68de27a43612dfa08e3eb2775683d2dbfe03dc6
