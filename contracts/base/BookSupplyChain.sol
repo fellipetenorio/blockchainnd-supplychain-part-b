@@ -249,7 +249,8 @@ contract BookSupplyChain {
         string memory title,
         string memory bAbstract,
         string memory text,
-        uint price
+        uint price,
+        string memory state
         
     )
     {
@@ -263,6 +264,6 @@ contract BookSupplyChain {
         bAbstract = book.bAbstract;
         text = book.text;
         price = book.price;
-        
+        state = stateLabel(book.state);
     }
 }

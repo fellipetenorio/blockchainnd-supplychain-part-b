@@ -64,9 +64,16 @@ node index.js
 open your brower in [http://localhost], can change the port by a variable with the same name.
 
 ### Tx Hashes
->Abstract - 0x6fed5fa67df5fe0a09feb0ab177635e352e004a41329c8ab5b57f03e6b961586
->Submitted - 0x3c45aa65f99f0950c5bca6dd6a51ed103ad9aa95f2021e6af21cb81d9d88240c
->Approved - 0x6b1b252d70696266155cb6aad61cf9eab0e7d36372f62e182d703a38d47a7b90
->Written - 0x552fb886605a36c294624a1ecb0b59980ecae56c0377572d10cdce949f4916d9
->Reviewed - 0x606f0f034e1c01e72fadae60f55c5570033d1e71d94a7c96129529e36888fa42
->Art - 0xc804289682b92a37214865c56ec4288ed505958d80e5675b05698425b7ba27df
+>Abstract - 0xfc3b9dacc5090827f6e1cf9aa68de27a43612dfa08e3eb2775683d2dbfe03dc6
+>Submitted - 0x3d84cd9376880ad66a50a8e7bcfd396cf48a1ffdb1dadbe8ac667d669f27c9df
+>Approved - 0xfddfcd62469edeff4c9752510b0cd9ebb7a66309cecb22242c3025194212aaa9
+>Written - 0x2567cb21ea62a5e6a2e61f0e1f5365c8d1ddc2c99f526705c59010acc2f92bb4
+>Reviewed - 0x7892887eb8119a544db9cc922cca82ebf5a2399b009c8551ee1eea1f69c21b9a
+>Art - 0x2d157561d3f68289c53bd107aa8a51481dceb72fbb0821fa204e298afdf22f0f
+>Ordered - 0xa98d2ca3936f62dc39fcb63dd9ea47fbe523a72609ed0d198a56052ebe943527
+>Produced - 0x2b7f65a973f6fb45064efcf7ca77d97a00d5300360c614c509ce434c1559417d
+>Shipped - 0x1f42a990da7d4769cfb21f6488166b37b191b2045946b7236b89dcaec77996fe
+>Received - 0x7e37d0ded96dc0d10b0527f91977a654758eb2745e4650121044d460c5e971f8
+
+An image connecting the hashes and the state during the functions
+![Hashes and State log](images/Hashes_State.PNG)

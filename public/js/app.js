@@ -2,11 +2,11 @@ App = {
     web3Provider: null,
     web3: null,
     contracts: {},
-    contractAddress: "0x6921b8078372867a9b5ed1c30f03158feb10cd70",
-    contractNetwork: 0, //rinkeby
+    contractAddress: "0xc8a76f44ded0d3b8578459263efec617695f956f",
     emptyAddress: "0x0000000000000000000000000000000000000000",
     sku: 0,
     upc: 0,
+    state: "",
     metamaskAccountID: "0x5CCc6d873CC47149A9a303332b007Ba65Ff3301d",
     writerName: null,
     title: null,
@@ -39,8 +39,7 @@ App = {
     },
 
     initWeb3: async function () {
-        /// Find or Inject Web3 Provider
-        /// Modern dapp browsers...
+
         if (window.ethereum) {
             App.web3Provider = window.ethereum;
             try {
@@ -246,7 +245,8 @@ App = {
         new Promise((resolve, reject) => {
             if (!App.upc)
                 throw new Error("Invalid UPC");
-            App.contracts.SupplyChainContract.orderBook(App.upc, {from: App.metamaskAccountID},
+            App.contracts.SupplyChainContract.orderBook(App.upc,
+                {from: App.metamaskAccountID, value: App.price, gas: 3000000},
                 function (error, book) {
                     if (error) throw new Error(error);
 
@@ -305,7 +305,7 @@ App = {
                 })
         }).then(b => {
             console.log(b);
-            alert('book shiped');
+            alert('book received');
         }).catch(alert);
     },
 
@@ -330,6 +330,7 @@ App = {
             $('#fetch-abstract').val(book[4]);
             $('#fetch-text').val(book[5]);
             $('#fetch-price').val(book[6]);
+            $('#fetch-state').val(book[7]);
         }).catch(alert);
     },
     fetchAllEvents: function () {

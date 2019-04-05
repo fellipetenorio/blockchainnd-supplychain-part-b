@@ -371,6 +371,10 @@
       {
         "name": "price",
         "type": "uint256"
+      },
+      {
+        "name": "state",
+        "type": "string"
       }
     ],
     "payable": false,
