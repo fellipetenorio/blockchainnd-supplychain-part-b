@@ -21,7 +21,7 @@ contract WriterRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyWriter() {
-    require(isWriter(msg.sender));
+    require(isWriter(msg.sender), "Need to be a Writer");
     _;
   }
 

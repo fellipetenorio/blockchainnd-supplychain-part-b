@@ -149,7 +149,7 @@ contract BookSupplyChain is Ownable, WriterRole, PublisherRole, ReviewerRole, Li
 
     // After finish the abstract submit to some Publisher
     function submitAbstract(uint _upc, address publisher) public
-    callerIs(Books[_upc].writer)
+    onlyWriter currentOwner(_upc)
     bookStateIs(_upc, State.Abstract) {
         Books[_upc].owner = publisher;
         Books[_upc].publisher = publisher;
