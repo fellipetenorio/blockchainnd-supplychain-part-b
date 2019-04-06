@@ -1,12 +1,15 @@
 pragma solidity ^0.5.2;
+import '../core/Ownable.sol';
+import '../accesscontrol/WriterRole.sol';
+import '../accesscontrol/LibraryRole.sol';
+import '../accesscontrol/PublisherRole.sol';
+import '../accesscontrol/ReviewerRole.sol';
 
 // Define a contract 'Supplychain'
-contract BookSupplyChain {
-    address payable owner;
+contract BookSupplyChain is Ownable, WriterRole, PublisherRole, ReviewerRole, LibraryRole {
     uint  currentSku;
 
     constructor() public payable {
-        owner = msg.sender;
         currentSku = 1;
     }
 
@@ -76,7 +79,7 @@ contract BookSupplyChain {
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner);
+        require(msg.sender == owner());
         _;
     }
 
@@ -111,15 +114,15 @@ contract BookSupplyChain {
     // DONE
     // Define a function 'kill' if required
     function kill() public {
-        if (msg.sender == owner) {
-            selfdestruct(owner);
+        if (msg.sender == owner()) {
+            selfdestruct(owner());
         }
     }
 
     // Write(or update) the abstract
-    function registerBook(uint _upc, string memory _writerName, string memory _draftTitle,
+    function writerAbstract(uint _upc, string memory _writerName, string memory _draftTitle,
         string memory _bAbstract, string memory _draft, uint _price)
-    public availableUpc(_upc) {
+    public availableUpc(_upc) onlyWriter {
         // Initialize only the essential
         Books[_upc] = Book({
             sku : currentSku,
@@ -145,7 +148,7 @@ contract BookSupplyChain {
     }
 
     // After finish the abstract submit to some Publisher
-    function submit(uint _upc, address publisher) public
+    function submitAbstract(uint _upc, address publisher) public
     callerIs(Books[_upc].writer)
     bookStateIs(_upc, State.Abstract) {
         Books[_upc].owner = publisher;
@@ -157,7 +160,7 @@ contract BookSupplyChain {
     }
 
     // in the approval, the publisher set the reviewer
-    function approve(uint _upc, address reviewer) public
+    function approves(uint _upc, address reviewer) public
     callerIs(Books[_upc].publisher)
     bookStateIs(_upc, State.Submitted) {
         // Update the appropriate fields
@@ -169,7 +172,7 @@ contract BookSupplyChain {
         emit Approved(_upc, reviewer);
     }
 
-    function write(uint _upc, string memory text) public
+    function writeBook(uint _upc, string memory text) public
     callerIs(Books[_upc].writer)
     bookStateIs(_upc, State.Approved) {
 

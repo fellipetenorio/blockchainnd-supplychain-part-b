@@ -18,15 +18,15 @@
   },
   "homepage": "https://github.com/fellipetenorio/blockchainnd-supplychain-part-b#readme",
   "dependencies": {
-    "express": "^4.16.4",
-    "nodemon": "^1.18.10",
-    "truffle": "^5.0.10",
-    "solidity-coverage": "^0.5.2",
-    "solium": "^1.1.7",
-    "web3": "^1.0.0-beta.35",
     "coveralls": "^3.0.2",
     "ethereumjs-wallet": "0.6.2",
+    "express": "^4.16.4",
+    "ganache-cli": "^6.1.8",
+    "nodemon": "^1.18.10",
+    "solidity-coverage": "^0.5.2",
+    "solium": "^1.1.7",
+    "truffle": "^5.0.11",
     "truffle-hdwallet-provider": "0.0.6",
-    "ganache-cli": "^6.1.8"
+    "web3": "^1.0.0-beta.35"
   }
 }
