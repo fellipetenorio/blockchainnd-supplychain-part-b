@@ -140,7 +140,7 @@ App = {
         new Promise((resolve, reject) => {
             if (!App.upc)
                 throw new Error("Invalid UPC");
-            App.contracts.SupplyChainContract.registerBook(App.upc, App.writerName, App.title, App.bAbstract,
+            App.contracts.SupplyChainContract.writerAbstract(App.upc, App.writerName, App.title, App.bAbstract,
                 App.text, App.price,
                 function (error, book) {
                     if (error) throw new Error(error);
@@ -159,7 +159,7 @@ App = {
         new Promise((resolve, reject) => {
             if (!App.upc)
                 throw new Error("Invalid UPC");
-            App.contracts.SupplyChainContract.submit(App.upc, App.publisher,
+            App.contracts.SupplyChainContract.submitAbstract(App.upc, App.publisher,
                 function (error, book) {
                     if (error) throw new Error(error);
 
