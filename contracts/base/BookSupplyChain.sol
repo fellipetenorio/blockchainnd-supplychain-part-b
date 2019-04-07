@@ -161,7 +161,7 @@ contract BookSupplyChain is Ownable, WriterRole, PublisherRole, ReviewerRole, Li
 
     // in the approval, the publisher set the reviewer
     function approves(uint _upc, address reviewer) public
-    callerIs(Books[_upc].publisher)
+    onlyPublisher currentOwner(_upc)
     bookStateIs(_upc, State.Submitted) {
         // Update the appropriate fields
         Books[_upc].owner = Books[_upc].writer;
@@ -173,7 +173,7 @@ contract BookSupplyChain is Ownable, WriterRole, PublisherRole, ReviewerRole, Li
     }
 
     function writeBook(uint _upc, string memory text) public
-    callerIs(Books[_upc].writer)
+    onlyWriter currentOwner(_upc)
     bookStateIs(_upc, State.Approved) {
 
         Books[_upc].owner = Books[_upc].reviewer;
@@ -185,7 +185,7 @@ contract BookSupplyChain is Ownable, WriterRole, PublisherRole, ReviewerRole, Li
 
     // in the review, the reviewer set the final text
     function review(uint _upc, string memory finalText) public
-    callerIs(Books[_upc].reviewer)
+    onlyReviewer currentOwner(_upc)
     bookStateIs(_upc, State.Written) {
         Books[_upc].owner = Books[_upc].publisher;
         Books[_upc].text = finalText;
@@ -195,7 +195,7 @@ contract BookSupplyChain is Ownable, WriterRole, PublisherRole, ReviewerRole, Li
     }
 
     function artBook(uint _upc, string memory _assetsUrl) public
-    callerIs(Books[_upc].publisher)
+    onlyPublisher currentOwner(_upc)
     bookStateIs(_upc, State.Reviewed) {
         Books[_upc].state = State.Art;
         Books[_upc].assetsUrl = _assetsUrl;
@@ -206,6 +206,7 @@ contract BookSupplyChain is Ownable, WriterRole, PublisherRole, ReviewerRole, Li
     }
 
     function orderBook(uint _upc) public payable
+    onlyLibrary currentOwner(_upc)
     paidEnough(_upc)
     checkValue(_upc)
     bookStateIs(_upc, State.Art)
@@ -219,7 +220,7 @@ contract BookSupplyChain is Ownable, WriterRole, PublisherRole, ReviewerRole, Li
 
 
     function produceBook(uint _upc) public
-    callerIs(Books[_upc].publisher)
+    onlyPublisher currentOwner(_upc)
     bookStateIs(_upc, State.Ordered) {
         Books[_upc].state = State.Produced;
 
@@ -227,7 +228,7 @@ contract BookSupplyChain is Ownable, WriterRole, PublisherRole, ReviewerRole, Li
     }
 
     function ship(uint _upc) public
-    callerIs(Books[_upc].publisher)
+    onlyPublisher currentOwner(_upc)
     bookStateIs(_upc, State.Produced) {
         Books[_upc].state = State.Shipped;
         Books[_upc].owner = Books[_upc].buyer;
