@@ -45,13 +45,18 @@ To develop this Smart Contract was used:
    
 For dev mode Ganache was used with one account per Role, when deployed in Rinkeby network only one account was used to reproduce the Roles.
 ### Smart Contract Rinkeby address:
->https://rinkeby.etherscan.io/address/0x6921b8078372867a9b5ed1c30f03158feb10cd70
+You can set the Smart Contract address:
+```
+public/js/apps.js:5
+```
+The current address seted is:
+>https://rinkeby.etherscan.io/address/0x3d72b0afe217b64a3d1885b13bad87baa7afbc8b
 
 ### Default Account
 >https://rinkeby.etherscan.io/address/0x5ccc6d873cc47149a9a303332b007ba65ff3301d
 
 ### Tx
->https://rinkeby.etherscan.io/tx/0xe08484fda805fcc133a48233a28478170a7d79710629220a51f5367d6b778061
+>https://rinkeby.etherscan.io/tx/0xed020dd4aef4baf568809febff92b3bd9665a404c3ba5a31f47e24590e0e8bf8
 
 ## Smart Contract files
 1. Folder `accesscontrol` contains the contracts with logic for the Roles:

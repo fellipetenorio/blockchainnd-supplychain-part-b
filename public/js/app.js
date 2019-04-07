@@ -2,7 +2,7 @@ App = {
     web3Provider: null,
     web3: null,
     contracts: {},
-    contractAddress: "0xc8a76f44ded0d3b8578459263efec617695f956f",
+    contractAddress: "0x3d72b0afe217b64a3d1885b13bad87baa7afbc8b",
     emptyAddress: "0x0000000000000000000000000000000000000000",
     sku: 0,
     upc: 0,
