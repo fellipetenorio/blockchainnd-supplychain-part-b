@@ -37,8 +37,8 @@ A Smart Contract was developed using [Solidity](https://solidity.readthedocs.io/
 To develop this Smart Contract was used:
 1. Truffle Ganache to create a local blockchain. 
    1. Some issues forced the use of JavaScript VM Env for payable method, see more [here](https://github.com/trufflesuite/ganache-cli/issues/497)
-   1. to start Ganache with the same mnemonic (dev purpose only, DO NOT USE THIS IN PRODUCTION!):
-      1. `ganache-cli -m "scale suit normal possible arm boost ridge blame orphan pilot rigid quit"`
+   1. to start Ganache with the same mnemonic (notice the high limit gas) (dev purpose only, DO NOT USE THIS IN PRODUCTION!):
+      1. `ganache-cli -m "scale suit normal possible arm boost ridge blame orphan pilot rigid quit"  -l 999999999999`
 1. Remix IDE to code solidity (.sol) files
    1. To compile and SYNC with local files the remixd npm module was used, see more details [here](https://remix.readthedocs.io/en/latest/tutorial_remixd_filesystem.html):
       1. `remixd -s <absolute-path-to-the-shared-folder> --remix-ide https://remix.ethereum.org`

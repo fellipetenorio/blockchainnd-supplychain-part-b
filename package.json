@@ -4,7 +4,7 @@
   "description": "Project for Part B of Term 2 Blockchain Udacity Nanodeegre Supply Chain project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "truffle --network development_cli test test/BookSupplyChain.js"
   },
   "repository": {
     "type": "git",
@@ -12,6 +12,10 @@
   },
   "keywords": [],
   "author": "",
+  "devDependencies": {
+    "truffle": "^4.1.14",
+    "truffle-hdwallet-provider": "^0.0.5"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/fellipetenorio/blockchainnd-supplychain-part-b/issues"
@@ -23,6 +27,7 @@
     "express": "^4.16.4",
     "ganache-cli": "^6.1.8",
     "nodemon": "^1.18.10",
+    "scrypt": "^6.0.3",
     "solidity-coverage": "^0.5.2",
     "solium": "^1.1.7",
     "truffle": "^5.0.11",
